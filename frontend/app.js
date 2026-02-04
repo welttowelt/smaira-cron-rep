@@ -1,10 +1,11 @@
 /**
  * Smaira Frontend - App Logic
- * Connects to AVNU API for real-time Starknet market data
+ * Connects to AVNU API for tokens/volume and CoinGecko for prices
  */
 
 // ============ CONFIG ============
 const AVNU_API = 'https://starknet.api.avnu.fi';
+const COINGECKO_API = 'https://api.coingecko.com/api/v3';
 const REFRESH_INTERVAL = 60000; // 1 minute
 
 // Default watchlist
@@ -22,20 +23,83 @@ let marketData = [];
 let alerts = [];
 let lastUpdate = null;
 
+// Mapping from symbol to CoinGecko ID
+const COINGECKO_IDS = {
+    'ETH': 'ethereum',
+    'STRK': 'starknet',
+    'USDC': 'usd-coin',
+    'USDC.e': 'usd-coin',
+    'USDT': 'tether',
+    'DAI': 'dai',
+    'WBTC': 'wrapped-bitcoin',
+    'LORDS': 'lords',
+    'ZEND': 'zend',
+    'BROTHER': 'starknet-brother',
+    'NSTR': 'nostra',
+};
+
 // ============ API FUNCTIONS ============
 
-async function fetchMarketData() {
+async function fetchTokensFromAVNU() {
     try {
-        // Try the tokens endpoint first
         const response = await fetch(`${AVNU_API}/v1/starknet/tokens?page=0&size=100`);
-        if (!response.ok) throw new Error('API error');
+        if (!response.ok) throw new Error('AVNU API error');
         const data = await response.json();
-        return data.content || data;
+        return data.content || [];
     } catch (error) {
-        console.error('Failed to fetch market data:', error);
+        console.error('Failed to fetch tokens from AVNU:', error);
+        return [];
+    }
+}
+
+async function fetchPricesFromCoinGecko(ids) {
+    try {
+        const idsParam = ids.join(',');
+        const response = await fetch(`${COINGECKO_API}/simple/price?ids=${idsParam}&vs_currencies=usd&include_24hr_change=true&include_market_cap=true`);
+        if (!response.ok) throw new Error('CoinGecko API error');
+        return await response.json();
+    } catch (error) {
+        console.error('Failed to fetch prices from CoinGecko:', error);
+        return {};
+    }
+}
+
+async function fetchMarketData() {
+    // Fetch tokens from AVNU
+    const tokens = await fetchTokensFromAVNU();
+    if (tokens.length === 0) {
         showToast('Failed to fetch market data', 'error');
         return [];
     }
+
+    // Get unique CoinGecko IDs we need
+    const cgIds = new Set();
+    tokens.forEach(t => {
+        const id = t.extensions?.coingeckoId || COINGECKO_IDS[t.symbol];
+        if (id) cgIds.add(id);
+    });
+
+    // Fetch prices from CoinGecko
+    const prices = await fetchPricesFromCoinGecko([...cgIds]);
+
+    // Merge data
+    return tokens.map(token => {
+        const cgId = token.extensions?.coingeckoId || COINGECKO_IDS[token.symbol];
+        const priceData = prices[cgId] || {};
+
+        return {
+            symbol: token.symbol,
+            name: token.name,
+            address: token.address,
+            priceUsd: priceData.usd || 0,
+            priceChange24h: priceData.usd_24h_change || 0,
+            volume24h: token.lastDailyVolumeUsd || 0,
+            marketCap: priceData.usd_market_cap || null,
+            verified: token.tags?.includes('AVNU') || token.tags?.includes('Verified'),
+            logoUri: token.logoUri,
+            coingeckoId: cgId
+        };
+    });
 }
 
 async function fetchQuote(sellToken, buyToken, sellAmount) {
@@ -72,17 +136,8 @@ const TOKEN_INFO = {
 // ============ DATA PROCESSING ============
 
 function processMarketData(raw) {
-    return raw.map(token => ({
-        symbol: token.symbol,
-        name: token.name,
-        address: token.address,
-        priceUsd: token.market?.currentPrice?.usd || 0,
-        priceChange24h: token.market?.priceChange24h?.usd || 0,
-        volume24h: token.market?.volume24h?.usd || 0,
-        marketCap: token.market?.marketCap?.usd || null,
-        verified: token.tags?.includes('Community') || token.tags?.includes('AVNU') || false,
-        logoUri: token.logoUri
-    })).filter(t => t.priceUsd > 0);
+    // Data is already processed in fetchMarketData()
+    return raw.filter(t => t.priceUsd > 0 || t.volume24h > 0);
 }
 
 function processAlerts(tokens) {
