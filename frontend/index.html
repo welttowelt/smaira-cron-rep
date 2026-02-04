@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smaira | Starknet Market Intelligence</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <span class="logo-icon">◈</span>
+                <span class="logo-text">Smaira</span>
+            </div>
+            <nav class="nav">
+                <a href="#" class="nav-item active" data-view="dashboard">
+                    <span class="nav-icon">📊</span>
+                    Dashboard
+                </a>
+                <a href="#" class="nav-item" data-view="markets">
+                    <span class="nav-icon">💹</span>
+                    Markets
+                </a>
+                <a href="#" class="nav-item" data-view="alerts">
+                    <span class="nav-icon">🚨</span>
+                    Alerts
+                </a>
+                <a href="#" class="nav-item" data-view="dca">
+                    <span class="nav-icon">💰</span>
+                    DCA Planner
+                </a>
+                <a href="#" class="nav-item" data-view="watchlist">
+                    <span class="nav-icon">👀</span>
+                    Watchlist
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="network-badge">
+                    <span class="dot"></span>
+                    Starknet Mainnet
+                </div>
+                <div class="powered-by">
+                    Powered by AVNU
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <h1 id="page-title">Dashboard</h1>
+                    <span class="last-updated" id="last-updated">Loading...</span>
+                </div>
+                <div class="header-right">
+                    <button class="btn btn-secondary" id="refresh-btn">
+                        <span class="btn-icon">↻</span>
+                        Refresh
+                    </button>
+                    <button class="btn btn-primary" id="report-btn">
+                        <span class="btn-icon">📄</span>
+                        Generate Report
+                    </button>
+                </div>
+            </header>
+
+            <!-- Dashboard View -->
+            <section id="dashboard-view" class="view active">
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">💎</div>
+                        <div class="stat-content">
+                            <div class="stat-label">Tokens Tracked</div>
+                            <div class="stat-value" id="total-tokens">--</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📈</div>
+                        <div class="stat-content">
+                            <div class="stat-label">24h Volume</div>
+                            <div class="stat-value" id="total-volume">--</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🚀</div>
+                        <div class="stat-content">
+                            <div class="stat-label">Top Gainer</div>
+                            <div class="stat-value positive" id="top-gainer">--</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⚠️</div>
+                        <div class="stat-content">
+                            <div class="stat-label">Active Alerts</div>
+                            <div class="stat-value" id="active-alerts">--</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Two Column Layout -->
+                <div class="dashboard-grid">
+                    <!-- Top Tokens -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Top Tokens by Volume</h2>
+                        </div>
+                        <div class="card-body">
+                            <table class="table" id="top-tokens-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Token</th>
+                                        <th>Price</th>
+                                        <th>24h Volume</th>
+                                        <th>24h Change</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Dynamic content -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Price Alerts -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Recent Alerts</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="alerts-list" id="alerts-list">
+                                <!-- Dynamic content -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Watchlist -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Your Watchlist</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="watchlist-grid" id="watchlist-grid">
+                            <!-- Dynamic content -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Markets View -->
+            <section id="markets-view" class="view">
+                <div class="card full-width">
+                    <div class="card-header">
+                        <h2>All Markets</h2>
+                        <div class="search-box">
+                            <input type="text" id="market-search" placeholder="Search tokens...">
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table class="table" id="markets-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Token</th>
+                                    <th>Price</th>
+                                    <th>24h Change</th>
+                                    <th>24h Volume</th>
+                                    <th>Market Cap</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Dynamic content -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Alerts View -->
+            <section id="alerts-view" class="view">
+                <div class="alerts-config card">
+                    <div class="card-header">
+                        <h2>Alert Configuration</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="config-grid">
+                            <div class="config-item">
+                                <label>Price Change Threshold</label>
+                                <div class="input-group">
+                                    <input type="number" id="price-threshold" value="5" min="1" max="100">
+                                    <span class="input-suffix">%</span>
+                                </div>
+                            </div>
+                            <div class="config-item">
+                                <label>Volume Spike Threshold</label>
+                                <div class="input-group">
+                                    <input type="number" id="volume-threshold" value="200" min="50" max="1000">
+                                    <span class="input-suffix">%</span>
+                                </div>
+                            </div>
+                            <div class="config-item">
+                                <button class="btn btn-primary" id="check-alerts-btn">Check Alerts Now</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Active Alerts</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="alerts-full-list" id="alerts-full-list">
+                            <!-- Dynamic content -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DCA View -->
+            <section id="dca-view" class="view">
+                <div class="dca-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>DCA Calculator</h2>
+                        </div>
+                        <div class="card-body">
+                            <form id="dca-form" class="dca-form">
+                                <div class="form-group">
+                                    <label>Sell Token</label>
+                                    <select id="dca-sell-token">
+                                        <option value="USDC">USDC</option>
+                                        <option value="USDT">USDT</option>
+                                        <option value="ETH">ETH</option>
+                                        <option value="DAI">DAI</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Buy Token</label>
+                                    <select id="dca-buy-token">
+                                        <option value="STRK">STRK</option>
+                                        <option value="ETH">ETH</option>
+                                        <option value="LORDS">LORDS</option>
+                                        <option value="ZEND">ZEND</option>
+                                        <option value="BROTHER">BROTHER</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Total Amount</label>
+                                    <div class="input-group">
+                                        <input type="number" id="dca-amount" value="100" min="1">
+                                        <span class="input-suffix" id="dca-amount-suffix">USDC</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Frequency</label>
+                                    <select id="dca-frequency">
+                                        <option value="hourly">Hourly</option>
+                                        <option value="daily" selected>Daily</option>
+                                        <option value="weekly">Weekly</option>
+                                        <option value="monthly">Monthly</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-block">Analyze DCA Strategy</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Analysis Results</h2>
+                        </div>
+                        <div class="card-body">
+                            <div id="dca-results" class="dca-results">
+                                <div class="dca-placeholder">
+                                    Configure your DCA strategy and click analyze to see results.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Watchlist View -->
+            <section id="watchlist-view" class="view">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Manage Watchlist</h2>
+                        <div class="watchlist-actions">
+                            <input type="text" id="add-token" placeholder="Add token symbol...">
+                            <button class="btn btn-primary" id="add-token-btn">Add</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="watchlist-manage" id="watchlist-manage">
+                            <!-- Dynamic content -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
