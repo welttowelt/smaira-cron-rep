@@ -1,0 +1,42 @@
+{
+    "name": "smaira-cron-rep",
+    "version": "1.0.0",
+    "description": "Starknet Market Intelligence & Automated Reporting Agent - Powered by AVNU",
+    "main": "dist/index.js",
+    "type": "module",
+    "scripts": {
+        "build": "tsc",
+        "start": "node dist/index.js",
+        "dev": "ts-node src/index.ts",
+        "report": "ts-node src/commands/report.ts",
+        "snapshot": "ts-node src/commands/snapshot.ts",
+        "alerts": "ts-node src/commands/alerts.ts",
+        "dca": "ts-node src/commands/dca.ts",
+        "cron": "ts-node src/cron/scheduler.ts"
+    },
+    "keywords": [
+        "starknet",
+        "avnu",
+        "defi",
+        "market-data",
+        "cron",
+        "automation",
+        "price-alerts",
+        "dca"
+    ],
+    "author": "stormforge",
+    "license": "MIT",
+    "dependencies": {
+        "@avnu/avnu-sdk": "^2.0.0",
+        "starknet": "^6.0.0",
+        "ethers": "^6.0.0",
+        "node-cron": "^3.0.0",
+        "dotenv": "^16.0.0"
+    },
+    "devDependencies": {
+        "@types/node": "^20.0.0",
+        "@types/node-cron": "^3.0.0",
+        "typescript": "^5.0.0",
+        "ts-node": "^10.0.0"
+    }
+}
