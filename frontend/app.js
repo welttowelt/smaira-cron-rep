@@ -343,7 +343,8 @@ function switchView(viewId) {
         markets: 'Markets',
         alerts: 'Alerts',
         dca: 'DCA Planner',
-        watchlist: 'Watchlist'
+        watchlist: 'Watchlist',
+        daydreams: 'Daydreams'
     };
     document.getElementById('page-title').textContent = titles[viewId] || 'Dashboard';
 
@@ -351,6 +352,7 @@ function switchView(viewId) {
     if (viewId === 'markets') renderMarketsTable();
     if (viewId === 'alerts') renderAlertsList('alerts-full-list', alerts);
     if (viewId === 'watchlist') renderWatchlistManage();
+    if (viewId === 'daydreams') loadDreamsData();
 }
 
 // ============ WATCHLIST MANAGEMENT ============
@@ -539,6 +541,48 @@ function generateReport() {
     URL.revokeObjectURL(url);
 
     showToast('Report downloaded!', 'success');
+}
+
+// ============ DAYDREAMS ============
+
+// $DREAMS token address on Base
+const DREAMS_BASE_ADDRESS = '0x176383016BB310C9f1C180DC6729d5E28104e602';
+
+let dreamsData = null;
+
+async function loadDreamsData() {
+    try {
+        // Fetch $DREAMS price from DexScreener
+        const response = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${DREAMS_BASE_ADDRESS}`);
+        if (!response.ok) throw new Error('DexScreener error');
+
+        const data = await response.json();
+        const pairs = data.pairs || [];
+
+        if (pairs.length > 0) {
+            const mainPair = pairs[0];
+            dreamsData = {
+                price: parseFloat(mainPair.priceUsd) || 0,
+                change24h: mainPair.priceChange?.h24 || 0,
+                volume24h: mainPair.volume?.h24 || 0,
+                liquidity: mainPair.liquidity?.usd || 0,
+            };
+
+            // Update UI
+            const priceEl = document.getElementById('dreams-price');
+            const changeEl = document.getElementById('dreams-change');
+            const volumeEl = document.getElementById('dreams-volume');
+
+            if (priceEl) priceEl.textContent = `$${dreamsData.price.toFixed(6)}`;
+            if (changeEl) {
+                changeEl.textContent = `${dreamsData.change24h >= 0 ? '+' : ''}${dreamsData.change24h.toFixed(2)}%`;
+                changeEl.className = `stat-value ${dreamsData.change24h >= 0 ? 'positive' : 'negative'}`;
+            }
+            if (volumeEl) volumeEl.textContent = formatNumber(dreamsData.volume24h);
+        }
+    } catch (error) {
+        console.error('Failed to fetch $DREAMS data:', error);
+    }
 }
 
 // ============ MAIN ============

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
     <div class="app">
         <!-- Sidebar -->
@@ -37,6 +39,10 @@
                 <a href="#" class="nav-item" data-view="watchlist">
                     <span class="nav-icon">👀</span>
                     Watchlist
+                </a>
+                <a href="#" class="nav-item" data-view="daydreams">
+                    <span class="nav-icon">🌙</span>
+                    Daydreams
                 </a>
             </nav>
             <div class="sidebar-footer">
@@ -305,12 +311,122 @@
                     </div>
                 </div>
             </section>
+
+            <!-- Daydreams View -->
+            <section id="daydreams-view" class="view">
+                <div class="stats-grid">
+                    <div class="stat-card daydreams-card">
+                        <div class="stat-icon">💭</div>
+                        <div class="stat-content">
+                            <div class="stat-label">$DREAMS Price</div>
+                            <div class="stat-value" id="dreams-price">--</div>
+                        </div>
+                    </div>
+                    <div class="stat-card daydreams-card">
+                        <div class="stat-icon">📊</div>
+                        <div class="stat-content">
+                            <div class="stat-label">24h Change</div>
+                            <div class="stat-value" id="dreams-change">--</div>
+                        </div>
+                    </div>
+                    <div class="stat-card daydreams-card">
+                        <div class="stat-icon">💰</div>
+                        <div class="stat-content">
+                            <div class="stat-label">24h Volume</div>
+                            <div class="stat-value" id="dreams-volume">--</div>
+                        </div>
+                    </div>
+                    <div class="stat-card daydreams-card">
+                        <div class="stat-icon">🌐</div>
+                        <div class="stat-content">
+                            <div class="stat-label">Networks</div>
+                            <div class="stat-value">3</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>🌙 Ecosystem</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="ecosystem-grid">
+                                <a href="https://router.daydreams.systems" target="_blank" class="ecosystem-link">
+                                    <strong>Dreams Router</strong><br>AI gateway with x402 payments
+                                </a>
+                                <a href="https://xgate.run" target="_blank" class="ecosystem-link">
+                                    <strong>xGate</strong><br>Paid AI tools discovery
+                                </a>
+                                <a href="https://facilitator.daydreams.systems" target="_blank" class="ecosystem-link">
+                                    <strong>Facilitator</strong><br>x402 payment processing
+                                </a>
+                                <a href="https://docs.dreams.fun" target="_blank" class="ecosystem-link">
+                                    <strong>Docs</strong><br>Build with Daydreams
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>🌉 Bridges</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="bridges-list">
+                                <div class="bridge-item">
+                                    <span>Solana ↔ Base</span>
+                                    <a href="https://bridge.daydreams.systems/" target="_blank"
+                                        class="btn btn-primary btn-sm">Bridge</a>
+                                </div>
+                                <div class="bridge-item">
+                                    <span>Solana ↔ Starknet</span>
+                                    <a href="https://nexus.hyperlane.xyz/?origin=solanamainnet&destination=starknet"
+                                        target="_blank" class="btn btn-primary btn-sm">Hyperlane</a>
+                                </div>
+                            </div>
+                            <div class="token-addresses">
+                                <div class="address-row"><span class="chain">Starknet</span><code>0x04fc...fb1</code>
+                                </div>
+                                <div class="address-row"><span class="chain">Base</span><code>0x1763...602</code></div>
+                                <div class="address-row"><span class="chain">Solana</span><code>GMzu...pump</code></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2>💳 x402 Protocol</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="x402-grid">
+                            <div class="x402-item">
+                                <strong>HTTP 402</strong>
+                                <p>Micropayments for APIs via payment-required response</p>
+                            </div>
+                            <div class="x402-item">
+                                <strong>Wallet Permits</strong>
+                                <p>ERC-2612 signed permits, no API keys needed</p>
+                            </div>
+                            <div class="x402-item">
+                                <strong>Agent Commerce</strong>
+                                <p>Agents discover and pay for services via xGate</p>
+                            </div>
+                            <div class="x402-item starknet-soon">
+                                <strong>z402 on Starknet</strong>
+                                <p>Privacy-preserving payments</p>
+                                <span class="badge-soon">Soon</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </main>
     </div>
 
-    <!-- Toast Container -->
     <div id="toast-container"></div>
-
     <script src="app.js"></script>
 </body>
+
 </html>
