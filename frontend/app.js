@@ -26,7 +26,8 @@ let lastUpdate = null;
 
 async function fetchMarketData() {
     try {
-        const response = await fetch(`${AVNU_API}/v1/starknet/market/tokens`);
+        // Try the tokens endpoint first
+        const response = await fetch(`${AVNU_API}/v1/starknet/tokens?page=0&size=100`);
         if (!response.ok) throw new Error('API error');
         const data = await response.json();
         return data.content || data;
